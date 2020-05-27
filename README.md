@@ -1,10 +1,9 @@
-# Posenet in Offscreen Canvas
+# Image classification in Offscreen Canvas
 
-demo https://posenet-worker.netlify.com/
-
-## How to dev
+## Run locally
 
 ```
+yarn
 yarn webpack-dev-server
 ```
 
