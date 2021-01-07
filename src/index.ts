@@ -3,13 +3,9 @@ import * as comlink from "comlink";
 import { canvasSize } from "./config";
 
 document.body.innerHTML = `
-<script>
-(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()
-</script>
-<img src="https://cdn.dribbble.com/users/634508/screenshots/5058273/theindcrediblerobot_dribbble.gif"></img>
-
 <div id='main'>
-  <video autoplay="true" id="video" src="" style="transform: scaleX(-1); display: none;"></video>
+  <h1 id="classification-classes">Detected object will be named here</h1>  
+  <video autoplay="true" id="video" src="" ></video>
   <canvas id="output" />
 </div>`;
 
@@ -39,7 +35,16 @@ export async function main() {
   async function mainloop() {
     offCtx.drawImage(video, 0, 0);
     const bitmap = offscreen.transferToImageBitmap();
-    api.update(comlink.transfer(bitmap, [bitmap as any]));
+    const data = await api.update(comlink.transfer(bitmap, [bitmap as any]));
+
+    const el = document.getElementById("classification-classes");
+
+    if (el && el.textContent) {
+      el.innerHTML = data.length > 0 ? data[0].class : "Nothing found";
+    }
+
+    await new Promise((r) => setTimeout(r, 500));
+
     requestAnimationFrame(mainloop);
   }
   mainloop();

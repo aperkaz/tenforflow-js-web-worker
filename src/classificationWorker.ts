@@ -1,7 +1,7 @@
 import * as comlink from "comlink";
 import * as cocoSsd from "@tensorflow-models/coco-ssd";
 
-import {  canvasSize } from "./config";
+import { canvasSize } from "./config";
 
 let net: cocoSsd.ObjectDetection | null = null;
 let ctx: CanvasRenderingContext2D | null = null;
@@ -25,11 +25,12 @@ comlink.expose({
   async update(bitmap: ImageBitmap) {
     if (net != null && ctx) {
       imageBufferContext.drawImage(bitmap, 0, 0);
-      
-      const t0= performance.now()
+
+      const t0 = performance.now();
       const data = await net.detect(imageBufferCanvas as any);
-      console.log('classification: ',performance.now()-t0)
-      console.log(data)
+      console.log("classification: ", performance.now() - t0);
+      console.log("data: ", data);
+      return data;
     }
-  }
+  },
 });
